@@ -1,0 +1,9 @@
+const intro=document.getElementById("intro");const nav=document.querySelector(".nav");const progress=document.querySelector(".scroll-progress");const glow=document.querySelector(".cursor-glow");
+window.addEventListener("load",()=>{setTimeout(()=>intro.classList.add("done"),2300)});
+window.addEventListener("scroll",()=>{const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=(scrollY/max*100)+"%";nav.classList.toggle("scrolled",scrollY>40)});
+if(glow){window.addEventListener("pointermove",e=>{glow.animate({left:e.clientX+"px",top:e.clientY+"px"},{duration:500,fill:"forwards"})})}
+const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible")}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+const counters=document.querySelectorAll("[data-count]");const counterIO=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;const target=parseFloat(el.dataset.count);const start=performance.now();const duration=1100;function tick(now){const p=Math.min((now-start)/duration,1);const value=target*p;el.textContent=target%1?value.toFixed(1):Math.floor(value);if(p<1)requestAnimationFrame(tick);else el.textContent=target%1?target.toFixed(1):target}requestAnimationFrame(tick);counterIO.unobserve(el)}),{threshold:.6});counters.forEach(c=>counterIO.observe(c));
+document.querySelectorAll(".mod-card").forEach(card=>{card.addEventListener("pointermove",e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(700px) rotateY(${x*3}deg) rotateX(${-y*3}deg) translateY(-5px)`});card.addEventListener("pointerleave",()=>card.style.transform="")});
+const menu=document.querySelector(".menu-btn");menu?.addEventListener("click",()=>{document.body.classList.toggle("menu-open")});
